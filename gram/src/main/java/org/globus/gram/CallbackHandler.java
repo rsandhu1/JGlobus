@@ -182,6 +182,7 @@ class GramCallbackHandler implements Runnable {
 		if (job.getStatus() == GramJob.STATUS_DONE || 
 		    job.getStatus() == GramJob.STATUS_FAILED) {
 		    handler.unregisterJob(job);
+		    handler.shutdown();
 		}
 	    
 		try {

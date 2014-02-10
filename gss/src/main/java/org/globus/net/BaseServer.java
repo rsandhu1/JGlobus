@@ -132,7 +132,11 @@ public abstract class BaseServer implements Runnable {
     public void shutdown() {
 	accept = false;
 	try {
-	    _server.close();
+	 int port = _server.getLocalPort();
+            _server.close();
+            if (port != -1) {
+            PortRange.getTcpInstance().free(port);
+            }
 	} catch(Exception e) {}
 	// this is a hack to ensue the server socket is 
 	// unblocked from accpet()
