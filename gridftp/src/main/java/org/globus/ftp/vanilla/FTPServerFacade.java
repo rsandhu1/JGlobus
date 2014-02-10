@@ -15,6 +15,7 @@
  */
 package org.globus.ftp.vanilla;
 
+import org.globus.net.PortRange;
 import org.globus.net.SocketFactory;
 import org.globus.util.Util;
 import org.globus.net.ServerSocketFactory;
@@ -348,7 +349,11 @@ public class FTPServerFacade {
         logger.debug("close server socket");
         if (serverSocket != null) {
             try {
+		int port = serverSocket.getLocalPort();
                 serverSocket.close();
+		if (port != -1) {
+                  PortRange.getTcpInstance().free(port);
+                }
             } catch (IOException e) {
             }
             unblockServer();

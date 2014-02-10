@@ -30,6 +30,7 @@ import org.globus.gsi.GSIConstants;
 import org.globus.gsi.gssapi.GSSConstants;
 import org.globus.gsi.gssapi.net.GssSocket;
 import org.globus.gsi.gssapi.net.GssSocketFactory;
+import org.globus.net.PortRange;
 
 import org.ietf.jgss.GSSCredential;
 import org.ietf.jgss.GSSException;
@@ -132,7 +133,11 @@ public abstract class BaseServer implements Runnable {
     public void shutdown() {
 	accept = false;
 	try {
+	    int port = _server.getLocalPort();
 	    _server.close();
+	    if (port != -1) {
+		PortRange.getTcpInstance().free(port);
+	     }
 	} catch(Exception e) {}
 	// this is a hack to ensue the server socket is 
 	// unblocked from accpet()
